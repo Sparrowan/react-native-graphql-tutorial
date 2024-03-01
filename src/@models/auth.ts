@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 export type LoginResponse = {
     login: {
         token: string;
@@ -15,4 +17,11 @@ export type User = {
     name: String,
     email: String,
     avatar: String | null
+}
+
+export type OnboardItem = {
+    id: Number,
+    title: String,
+    description: String,
+    image: any
 }

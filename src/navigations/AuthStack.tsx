@@ -4,6 +4,7 @@ import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screens/Authentication/LoginScreen';
+import OnboardingScreen from '../screens/Authentication/OnboardingScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -11,6 +12,7 @@ const Stack = createNativeStackNavigator();
 function AuthStack() {
     return (
         <Stack.Navigator>
+            <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>
     );
