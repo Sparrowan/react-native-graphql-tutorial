@@ -10,8 +10,12 @@ const OnboardingScreen = () => {
     const scrollX = useRef<Animated.Value>(new Animated.Value(0)).current
     const slidesRef = useRef(null)
     const viewableItemsChanged = useRef(({ viewableItems }: { viewableItems: any }) => {
-        setCurrentIndex(viewableItems[0].index)
-    }).current
+        if (viewableItems && viewableItems.length > 0) {
+            console.log("viewableItems", viewableItems)
+            setCurrentIndex(viewableItems[0].index);
+        }
+    }).current;
+
     const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current
     return (
         <View style={styles.container}>
