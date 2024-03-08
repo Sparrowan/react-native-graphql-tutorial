@@ -5,9 +5,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screens/Authentication/LoginScreen';
 import OnboardingScreen from '../screens/Authentication/OnboardingScreen';
+import { AuthRootStackParamList } from './navigationTypes';
 
 
-const Stack = createNativeStackNavigator();
+
+const Stack = createNativeStackNavigator<AuthRootStackParamList>();
+
 
 function AuthStack() {
     return (

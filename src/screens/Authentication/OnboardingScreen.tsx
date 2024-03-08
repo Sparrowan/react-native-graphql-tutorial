@@ -1,30 +1,70 @@
-import { View, Text, FlatList, StyleSheet, Animated } from 'react-native'
-import React, { useRef, useState } from 'react'
-
-import onboardingData from '../../utils/onboardingData'
-import OnboardingItem from '../../components/OnboardingItem'
-import Paginator from '../../components/Paginator'
-import NextButton from '../../components/NextButton'
+import React, { useEffect, useRef, useState } from 'react';
+import { View, FlatList, StyleSheet, Animated, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AuthRootStackParamList } from '../../navigations/navigationTypes';
+import onboardingData from '../../utils/onboardingData';
+import OnboardingItem from '../../components/OnboardingItem';
+import Paginator from '../../components/Paginator';
+import NextButton from '../../components/NextButton';
 
 const OnboardingScreen = () => {
-    const [currentIndex, setCurrentIndex] = useState(0)
-    const scrollX = useRef<Animated.Value>(new Animated.Value(0)).current
-    const slidesRef = useRef<FlatList | null>(null)
+    const navigation = useNavigation<NativeStackNavigationProp<AuthRootStackParamList, 'Login'>>();
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [loading, setLoading] = useState(true); // Initialize loading state to false
+    const scrollX = useRef<Animated.Value>(new Animated.Value(0)).current;
+    const slidesRef = useRef<FlatList | null>(null);
     const viewableItemsChanged = useRef(({ viewableItems }: { viewableItems: any }) => {
         if (viewableItems && viewableItems.length > 0) {
             setCurrentIndex(viewableItems[0].index);
         }
     }).current;
 
-    const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current
+    const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
-    const scrollTo = () => {
+    const scrollTo = async () => {
         if (currentIndex < onboardingData.length - 1) {
-            slidesRef?.current?.scrollToIndex({ index: currentIndex + 1 })
+            slidesRef?.current?.scrollToIndex({ index: currentIndex + 1 });
         } else {
-            console.log('Last item')
+            try {
+                await AsyncStorage.setItem('@viewedOnBoarding', 'true');
+                navigation.navigate('Login');
+            } catch (e) {
+                console.log('Async onboard set item error', e);
+            }
         }
+    };
+
+    const checkOnBoarding = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@viewedOnBoarding');
+            if (value !== null) {
+                navigation.navigate('Login');
+            } else {
+                console.log('First time');
+            }
+        } catch (e) {
+            console.log('Async onboard get item error', e);
+        }
+        finally {
+            setLoading(false)
+        }
+    };
+    useEffect(() => {
+        checkOnBoarding(); // Start loading once AsyncStorage check is complete
+    }, [navigation]);
+
+    if (!loading) {
+        // Render loading indicator while AsyncStorage check is in progress
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
     }
+
+    // Render onboarding content once loading is complete
     return (
         <View style={styles.container}>
             <View style={{ flex: 3 }}>
@@ -37,7 +77,7 @@ const OnboardingScreen = () => {
                     bounces={false}
                     keyExtractor={(item) => item.id.toString()}
                     onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
-                        useNativeDriver: false
+                        useNativeDriver: false,
                     })}
                     scrollEventThrottle={32}
                     onViewableItemsChanged={viewableItemsChanged}
@@ -48,10 +88,10 @@ const OnboardingScreen = () => {
             <Paginator data={onboardingData} scrollX={scrollX} />
             <NextButton scrollTo={scrollTo} percentage={(currentIndex + 1) * (100 / onboardingData.length)} />
         </View>
-    )
-}
+    );
+};
 
-export default OnboardingScreen
+export default OnboardingScreen;
 
 const styles = StyleSheet.create({
     container: {
