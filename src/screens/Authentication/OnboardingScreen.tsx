@@ -4,11 +4,12 @@ import React, { useRef, useState } from 'react'
 import onboardingData from '../../utils/onboardingData'
 import OnboardingItem from '../../components/OnboardingItem'
 import Paginator from '../../components/Paginator'
+import NextButton from '../../components/NextButton'
 
 const OnboardingScreen = () => {
     const [currentIndex, setCurrentIndex] = useState(0)
     const scrollX = useRef<Animated.Value>(new Animated.Value(0)).current
-    const slidesRef = useRef(null)
+    const slidesRef = useRef<FlatList | null>(null)
     const viewableItemsChanged = useRef(({ viewableItems }: { viewableItems: any }) => {
         if (viewableItems && viewableItems.length > 0) {
             setCurrentIndex(viewableItems[0].index);
@@ -16,6 +17,14 @@ const OnboardingScreen = () => {
     }).current;
 
     const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current
+
+    const scrollTo = () => {
+        if (currentIndex < onboardingData.length - 1) {
+            slidesRef?.current?.scrollToIndex({ index: currentIndex + 1 })
+        } else {
+            console.log('Last item')
+        }
+    }
     return (
         <View style={styles.container}>
             <View style={{ flex: 3 }}>
@@ -37,6 +46,7 @@ const OnboardingScreen = () => {
                 />
             </View>
             <Paginator data={onboardingData} scrollX={scrollX} />
+            <NextButton scrollTo={scrollTo} percentage={(currentIndex + 1) * (100 / onboardingData.length)} />
         </View>
     )
 }
