@@ -12,7 +12,7 @@ import NextButton from '../../components/NextButton';
 const OnboardingScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<AuthRootStackParamList, 'Login'>>();
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [loading, setLoading] = useState(true); // Initialize loading state to false
+    const [showOnBoarding, setShowOnBoarding] = useState(false)
     const scrollX = useRef<Animated.Value>(new Animated.Value(0)).current;
     const slidesRef = useRef<FlatList | null>(null);
     const viewableItemsChanged = useRef(({ viewableItems }: { viewableItems: any }) => {
@@ -42,20 +42,17 @@ const OnboardingScreen = () => {
             if (value !== null) {
                 navigation.navigate('Login');
             } else {
-                console.log('First time');
+                setShowOnBoarding(true)
             }
         } catch (e) {
             console.log('Async onboard get item error', e);
         }
-        finally {
-            setLoading(false)
-        }
     };
     useEffect(() => {
         checkOnBoarding(); // Start loading once AsyncStorage check is complete
-    }, [navigation]);
+    }, []);
 
-    if (!loading) {
+    if (!showOnBoarding) {
         // Render loading indicator while AsyncStorage check is in progress
         return (
             <View style={styles.container}>

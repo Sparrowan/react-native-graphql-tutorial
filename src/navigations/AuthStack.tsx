@@ -13,6 +13,8 @@ const Stack = createNativeStackNavigator<AuthRootStackParamList>();
 
 
 function AuthStack() {
+
+    
     return (
         <Stack.Navigator>
             <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
