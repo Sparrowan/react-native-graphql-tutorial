@@ -11,7 +11,6 @@ const OnboardingScreen = () => {
     const slidesRef = useRef(null)
     const viewableItemsChanged = useRef(({ viewableItems }: { viewableItems: any }) => {
         if (viewableItems && viewableItems.length > 0) {
-            console.log("viewableItems", viewableItems)
             setCurrentIndex(viewableItems[0].index);
         }
     }).current;

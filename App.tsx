@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { ApolloProvider } from '@apollo/client';
-import { client } from './utils/client';
+import { client } from './src/utils/client';
 import { Provider } from "react-redux";
-import store from './redux/store';
+import store from './src/redux/store';
 import { NavigationContainer } from '@react-navigation/native';
-import AuthStack from './navigations/AuthStack';
+import AuthStack from './src/navigations/AuthStack';
 
 
 
