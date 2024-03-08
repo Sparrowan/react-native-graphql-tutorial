@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { View, FlatList, StyleSheet, Animated, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthRootStackParamList } from '../../navigations/navigationTypes';
 import onboardingData from '../../utils/onboardingData';
@@ -48,9 +48,11 @@ const OnboardingScreen = () => {
             console.log('Async onboard get item error', e);
         }
     };
-    useEffect(() => {
-        checkOnBoarding(); // Start loading once AsyncStorage check is complete
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            checkOnBoarding();
+        }, [navigation])
+    );
 
     if (!showOnBoarding) {
         // Render loading indicator while AsyncStorage check is in progress
