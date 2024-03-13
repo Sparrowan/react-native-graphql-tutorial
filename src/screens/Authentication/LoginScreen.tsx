@@ -2,14 +2,14 @@ import { View, Text, Image, Pressable, TextInput, TouchableOpacity, ScrollView, 
 import React, { useState } from 'react'
 import { SafeAreaView } from "react-native-safe-area-context";
 import COLORS from '../../constants/colors';
-import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox"
 import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import SocialAuthButton from '../../components/SocialAuthButton';
+import RHFTextInput from '../../components/RHFTextInput';
+import RHFPaswordInput from '../../components/RHFPaswordInput';
 
 const LoginScreen = () => {
-    const [isPasswordShown, setIsPasswordShown] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
     const navigation = useNavigation()
 
@@ -18,58 +18,12 @@ const LoginScreen = () => {
             <View style={styles.mainContainer}>
                 <View style={{ marginVertical: 22 }}>
                     <Text style={styles.welcomeText}>
-                        Hi Welcome Back ! 👋
+                        Login
                     </Text>
-
-                    <Text style={styles.helloText}>Hello again you have been missed!</Text>
                 </View>
 
-                <View style={{ marginBottom: 12 }}>
-                    <Text style={styles.inputLabels}>Email address</Text>
-
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            placeholder='Enter your email address'
-                            placeholderTextColor={COLORS.black}
-                            keyboardType='email-address'
-                            style={{
-                                width: "100%"
-                            }}
-                        />
-                    </View>
-                </View>
-
-                <View style={{ marginBottom: 12 }}>
-                    <Text style={styles.inputLabels}>Password</Text>
-
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            placeholder='Enter your password'
-                            placeholderTextColor={COLORS.black}
-                            secureTextEntry={isPasswordShown}
-                            style={{
-                                width: "100%"
-                            }}
-                        />
-
-                        <TouchableOpacity
-                            onPress={() => setIsPasswordShown(!isPasswordShown)}
-                            style={{
-                                position: "absolute",
-                                right: 12
-                            }}
-                        >
-                            {
-                                isPasswordShown == true ? (
-                                    <Ionicons name="eye-off" size={24} color={COLORS.black} />
-                                ) : (
-                                    <Ionicons name="eye" size={24} color={COLORS.black} />
-                                )
-                            }
-
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                <RHFTextInput label='Email Address' placeholder='Enter your email address' keyboardType='email-address' />
+                <RHFPaswordInput label='Password' placeholder='Enter your password' />
 
                 <View style={styles.rememberMeContainer}>
                     <Checkbox
@@ -79,7 +33,7 @@ const LoginScreen = () => {
                         color={isChecked ? COLORS.primary : undefined}
                     />
 
-                    <Text>Remenber Me</Text>
+                    <Text>Remember Me</Text>
                 </View>
 
                 <Button
@@ -153,26 +107,12 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: 'bold',
         marginVertical: 12,
-        color: COLORS.black
+        color: COLORS.black,
+        textAlign: 'center'
     },
     helloText: {
         fontSize: 16,
         color: COLORS.black
-    },
-    inputLabels: {
-        fontSize: 16,
-        fontWeight: '400',
-        marginVertical: 8
-    },
-    inputContainer: {
-        width: "100%",
-        height: 48,
-        borderColor: COLORS.black,
-        borderWidth: 1,
-        borderRadius: 8,
-        alignItems: "center",
-        justifyContent: "center",
-        paddingLeft: 22,
     },
     rememberMeContainer: {
         flexDirection: 'row',
