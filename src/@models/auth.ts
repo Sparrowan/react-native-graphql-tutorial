@@ -23,5 +23,5 @@ export type OnboardItem = {
     id: Number,
     title: String,
     description: String,
-    image: any
+    image: ImageSourcePropType
 }

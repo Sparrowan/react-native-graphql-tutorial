@@ -1,3 +1,4 @@
+
 {
   "expo": {
     "name": "react-native-graphql",
@@ -9,7 +10,7 @@
     "splash": {
       "image": "./assets/splashimg.png",
       "resizeMode": "contain",
-      "backgroundColor": "green"
+      "backgroundColor": "#007260"
     },
     "assetBundlePatterns": [
       "**/*"
