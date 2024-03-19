@@ -8,10 +8,33 @@ import { useNavigation } from '@react-navigation/native';
 import SocialAuthButton from '../../components/SocialAuthButton';
 import RHFTextInput from '../../components/RHFTextInput';
 import RHFPaswordInput from '../../components/RHFPaswordInput';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginSchema } from '../../utils/yup/Schema';
+import { LoginVariables } from '../../@models/auth';
+import { reduxLogin } from '../../redux/thunks/auth';
+import { useDispatch } from '../../redux/store';
+import useLoginSuccess from '../../hooks/useLoginSuccess';
+
+
 
 const LoginScreen = () => {
     const [isChecked, setIsChecked] = useState(false);
     const navigation = useNavigation()
+
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<LoginVariables>({ resolver: yupResolver(loginSchema as any) });
+    ;
+    const dispatch = useDispatch();
+    const onLoginSuccess = useLoginSuccess();
+
+
+    const login = (data: LoginVariables) => {
+        dispatch(reduxLogin(data)).then(onLoginSuccess)
+    };
 
     return (
         <SafeAreaView style={styles.safeAreaView}>
@@ -22,8 +45,24 @@ const LoginScreen = () => {
                     </Text>
                 </View>
 
-                <RHFTextInput label='Email Address' placeholder='Enter your email address' keyboardType='email-address' />
-                <RHFPaswordInput label='Password' placeholder='Enter your password' />
+                <RHFTextInput
+                    name='email'
+                    label='Email Address'
+                    placeholder='Enter your email address'
+                    keyboardType='email-address'
+                    control={control}
+                    error={errors.email}
+                />
+                <RHFPaswordInput
+                    name='password'
+                    control={control}
+                    rules={{
+                        required: 'Email is required',
+                    }}
+                    label='Password'
+                    placeholder='Enter your password'
+                    error={errors.password}
+                />
 
                 <View style={styles.rememberMeContainer}>
                     <Checkbox
@@ -43,7 +82,7 @@ const LoginScreen = () => {
                         marginTop: 18,
                         marginBottom: 4,
                     }}
-                    onPress={() => { }}
+                    onPress={handleSubmit(login)}
                 />
 
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 20 }}>

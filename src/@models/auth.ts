@@ -10,7 +10,7 @@ export type LoginResponse = {
 export type LoginVariables = {
     email: String,
     password: String,
-    device: String
+    device?: 'mobile'
 }
 
 export type User = {

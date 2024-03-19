@@ -5,7 +5,7 @@ import { client } from "../utils/client";
 
 
 export const apiLogin = (variables: LoginVariables) => {
-    console.log(variables)
+    variables = { ...variables, device: "mobile" };
     return client.mutate<LoginResponse, LoginVariables>({
         mutation: LOGIN,
         variables,
